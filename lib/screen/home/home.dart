@@ -7,7 +7,7 @@ import 'package:flutter_repo/screen/home/components/home_chip.dart';
 import 'package:flutter_repo/screen/home/components/home_filter.dart';
 import 'package:flutter_repo/screen/home/components/home_header.dart';
 import 'package:flutter_repo/screen/home/components/home_nearest_restaurant_grid.dart';
-import 'package:flutter_repo/screen/home/components/home_nearest_restaurant_horizontal.dart';
+import 'package:flutter_repo/screen/home/components/home_nearest_restaurant_hz.dart';
 import 'package:flutter_repo/utils/config.dart';
 import 'package:flutter_repo/widgets/app_button_primary.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -104,21 +104,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: ListView(
                     children: [
-                      header(
-                          textEditingController: _textEditingController,
-                          focusNode: _focusNode,
-                          isFilter: !_isFilter,
-                          isFilterType: _typeSelected().isNotEmpty,
-                          onFocusChange: (focusState) {
-                            setState(() {
-                              //_focusNode.hasFocus;
-                            });
-                          },
-                          onFilterClick: () {
-                            setState(() {
-                              _isFilter = true;
-                            });
-                          }),
+                      HomeHeader(
+                        textEditingController: _textEditingController,
+                        focusNode: _focusNode,
+                        isFilter: !_isFilter,
+                        isFilterType: _typeSelected().isNotEmpty,
+                        onFocusChange: (focusState) {
+                          setState(() {
+                            //_focusNode.hasFocus;
+                          });
+                        },
+                        onFilterClick: () {
+                          setState(() {
+                            _isFilter = true;
+                          });
+                        },
+                      ),
                       Visibility(
                         visible: _selectedChips.isNotEmpty,
                         child: Padding(
@@ -140,18 +141,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Visibility(
                         visible: _checkDefault(),
-                        child: promotion(),
+                        child: const HomePromotion(),
                       ),
-
                       _checkDefault()
-                          ? nearestRestaurantHorizontal(restaurantList: _restaurantList)
-                          : Visibility(
+                          ? HomeNearestRestaurantHz(restaurantList: _restaurantList)
+                          : (Visibility(
                               visible: _checkRestaurant(),
-                              child: nearestRestaurantGrid(context: context,restaurantList: _restaurantResults),
-                            ),
+                              child: HomeNearestRestaurantGird(
+                                context: context,
+                                restaurantList: _restaurantResults,
+                              ),
+                            )),
                       Visibility(
                         visible: _checkFood(),
-                        child: popularMenu(foodList: _foodResults, isViewMore: _checkDefault()),
+                        child: HomePopularMenu(foodList: _foodResults, isViewMore: _checkDefault()),
                       ),
                       Visibility(
                           visible: _isFilter,

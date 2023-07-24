@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_repo/models/restaurant_form.dart';
 import 'package:flutter_repo/utils/decoration.dart';
 
-nearestRestaurantGrid({required BuildContext context, required List<RestaurantForm> restaurantList}) => Column(
+class HomeNearestRestaurantGird extends StatelessWidget {
+  const HomeNearestRestaurantGird({super.key, required this.context, required this.restaurantList});
+
+  final BuildContext context;
+  final List<RestaurantForm> restaurantList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
@@ -35,35 +43,37 @@ nearestRestaurantGrid({required BuildContext context, required List<RestaurantFo
         const SizedBox(height: 20),
       ],
     );
+  }
 
-_restaurantWidget({required RestaurantForm restaurantForm}) => Container(
-  decoration: AppDecorations.decorationBgContainer(),
-  child: Column(
-    children: [
-      AspectRatio(
-        aspectRatio: 147 / 100,
-        child: Image.asset(restaurantForm.image),
-      ),
-      const SizedBox(height: 12),
-      Text(
-        restaurantForm.name,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.w800,
+  _restaurantWidget({required RestaurantForm restaurantForm}) => Container(
+        decoration: AppDecorations.decorationBgContainer(),
+        child: Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 147 / 100,
+              child: Image.asset(restaurantForm.image),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              restaurantForm.name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              restaurantForm.time,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white30,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
         ),
-      ),
-      const SizedBox(height: 8),
-      Text(
-        restaurantForm.time,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.white30,
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-    ],
-  ),
-);
+      );
+}

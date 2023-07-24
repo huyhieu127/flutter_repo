@@ -4,7 +4,14 @@ import 'package:flutter_repo/utils/color_utils.dart';
 import 'package:flutter_repo/utils/decoration.dart';
 import 'package:flutter_repo/widgets/app_ink_well.dart';
 
-nearestRestaurantHorizontal({required List<RestaurantForm> restaurantList}) => Column(
+class HomeNearestRestaurantHz extends StatelessWidget {
+  const HomeNearestRestaurantHz({super.key, required this.restaurantList});
+
+  final List<RestaurantForm> restaurantList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -51,38 +58,40 @@ nearestRestaurantHorizontal({required List<RestaurantForm> restaurantList}) => C
         const SizedBox(height: 20),
       ],
     );
+  }
 
-_restaurantWidget({required RestaurantForm restaurantForm}) => AspectRatio(
-      aspectRatio: 147 / 184,
-      child: Container(
-        decoration: AppDecorations.decorationBgContainer(),
-        child: Column(
-          children: [
-            AspectRatio(
-              aspectRatio: 147 / 100,
-              child: Image.asset(restaurantForm.image),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              restaurantForm.name,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
+  _restaurantWidget({required RestaurantForm restaurantForm}) => AspectRatio(
+        aspectRatio: 147 / 184,
+        child: Container(
+          decoration: AppDecorations.decorationBgContainer(),
+          child: Column(
+            children: [
+              AspectRatio(
+                aspectRatio: 147 / 100,
+                child: Image.asset(restaurantForm.image),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              restaurantForm.time,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white30,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+              const SizedBox(height: 12),
+              Text(
+                restaurantForm.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                restaurantForm.time,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white30,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+}

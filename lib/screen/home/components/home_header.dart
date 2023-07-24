@@ -5,14 +5,27 @@ import 'package:flutter_repo/utils/decoration.dart';
 import 'package:flutter_repo/widgets/app_ink_well.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-header(
-        {required TextEditingController textEditingController,
-        required FocusNode focusNode,
-        required bool isFilter,
-        required bool isFilterType,
-        required ValueChanged<bool>? onFocusChange,
-        required GestureTapCallback? onFilterClick}) =>
-    Column(
+class HomeHeader extends StatelessWidget {
+  const HomeHeader({
+    super.key,
+    required this.textEditingController,
+    required this.focusNode,
+    required this.isFilter,
+    required this.isFilterType,
+    required this.onFocusChange,
+    required this.onFilterClick,
+  });
+
+  final TextEditingController textEditingController;
+  final FocusNode focusNode;
+  final bool isFilter;
+  final bool isFilterType;
+  final ValueChanged<bool>? onFocusChange;
+  final GestureTapCallback? onFilterClick;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(24),
@@ -126,3 +139,5 @@ header(
         const SizedBox(height: 24),
       ],
     );
+  }
+}

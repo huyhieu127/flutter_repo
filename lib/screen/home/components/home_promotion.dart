@@ -3,7 +3,12 @@ import 'package:flutter_repo/gen/assets.gen.dart';
 import 'package:flutter_repo/utils/decoration.dart';
 import 'package:flutter_repo/widgets/app_ink_well.dart';
 
-promotion() => Container(
+class HomePromotion extends StatelessWidget {
+  const HomePromotion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       margin: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
       decoration: AppDecorations.decorationLinearGradient(),
       child: Stack(
@@ -54,3 +59,5 @@ promotion() => Container(
         ],
       ),
     );
+  }
+}

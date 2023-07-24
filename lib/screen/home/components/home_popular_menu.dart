@@ -6,7 +6,6 @@ import 'package:flutter_repo/widgets/app_ink_well.dart';
 
 popularMenu({required List<FoodForm> foodList}) => Column(
       children: [
-        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(

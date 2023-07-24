@@ -19,9 +19,9 @@ class AppDecorations {
 
 
   ///Methods///
-  static decorationBgContainer({double radius = 16, int alpha = 20}) =>
+  static decorationBgContainer({double radius = 16, int alpha = 20, Color? color}) =>
       BoxDecoration(
-        color: AppColor.colorBg.withAlpha(alpha),
+        color: color ?? AppColor.colorBg.withAlpha(alpha),
         borderRadius: BorderRadius.circular(radius),
       );
 

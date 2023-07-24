@@ -4,7 +4,7 @@ import 'package:flutter_repo/utils/decoration.dart';
 import 'package:flutter_repo/widgets/app_ink_well.dart';
 
 promotion() => Container(
-      margin: const EdgeInsets.all(24),
+      margin: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
       decoration: AppDecorations.decorationLinearGradient(),
       child: Stack(
         children: [

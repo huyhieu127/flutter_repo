@@ -5,5 +5,11 @@ class FoodForm {
   int price;
   int amount;
 
-  FoodForm({required this.image, required this.name, this.desc = "", this.price = 0, this.amount = 0});
+  FoodForm({
+    required this.image,
+    required this.name,
+    this.desc = "",
+    this.price = 0,
+    this.amount = 0,
+  });
 }

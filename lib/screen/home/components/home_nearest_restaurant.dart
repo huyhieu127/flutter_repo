@@ -48,6 +48,7 @@ nearestRestaurant({required List<RestaurantForm> restaurantList}) => Column(
               separatorBuilder: (context, index) => const SizedBox(width: 24),
               itemCount: restaurantList.length),
         ),
+        const SizedBox(height: 20),
       ],
     );
 

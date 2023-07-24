@@ -4,7 +4,7 @@ import 'package:flutter_repo/utils/color_utils.dart';
 import 'package:flutter_repo/utils/decoration.dart';
 import 'package:flutter_repo/widgets/app_ink_well.dart';
 
-popularMenu({required List<FoodForm> foodList}) => Column(
+popularMenu({required List<FoodForm> foodList, required bool isViewMore}) => Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -20,17 +20,20 @@ popularMenu({required List<FoodForm> foodList}) => Column(
                   ),
                 ),
               ),
-              AppInkWell(
-                onTap: () {},
-                radius: 10,
-                child: const Padding(
-                  padding: EdgeInsets.all(6),
-                  child: Text(
-                    "View More",
-                    style: TextStyle(
-                      color: AppColor.secondary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
+              Visibility(
+                visible: isViewMore,
+                child: AppInkWell(
+                  onTap: () {},
+                  radius: 10,
+                  child: const Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Text(
+                      "View More",
+                      style: TextStyle(
+                        color: AppColor.secondary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                 ),

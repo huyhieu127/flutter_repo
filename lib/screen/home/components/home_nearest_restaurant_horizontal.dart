@@ -4,7 +4,7 @@ import 'package:flutter_repo/utils/color_utils.dart';
 import 'package:flutter_repo/utils/decoration.dart';
 import 'package:flutter_repo/widgets/app_ink_well.dart';
 
-nearestRestaurant({required List<RestaurantForm> restaurantList}) => Column(
+nearestRestaurantHorizontal({required List<RestaurantForm> restaurantList}) => Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),

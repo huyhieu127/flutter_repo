@@ -6,7 +6,8 @@ import 'package:flutter_repo/models/restaurant_form.dart';
 import 'package:flutter_repo/screen/home/components/home_chip.dart';
 import 'package:flutter_repo/screen/home/components/home_filter.dart';
 import 'package:flutter_repo/screen/home/components/home_header.dart';
-import 'package:flutter_repo/screen/home/components/home_nearest_restaurant.dart';
+import 'package:flutter_repo/screen/home/components/home_nearest_restaurant_grid.dart';
+import 'package:flutter_repo/screen/home/components/home_nearest_restaurant_horizontal.dart';
 import 'package:flutter_repo/utils/config.dart';
 import 'package:flutter_repo/widgets/app_button_primary.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -138,16 +139,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Visibility(
-                        visible: _checkPromotion(),
+                        visible: _checkDefault(),
                         child: promotion(),
                       ),
-                      Visibility(
-                        visible: _checkRestaurant(),
-                        child: nearestRestaurant(restaurantList: _restaurantResults),
-                      ),
+
+                      _checkDefault()
+                          ? nearestRestaurantHorizontal(restaurantList: _restaurantList)
+                          : Visibility(
+                              visible: _checkRestaurant(),
+                              child: nearestRestaurantGrid(context: context,restaurantList: _restaurantResults),
+                            ),
                       Visibility(
                         visible: _checkFood(),
-                        child: popularMenu(foodList: _foodResults),
+                        child: popularMenu(foodList: _foodResults, isViewMore: _checkDefault()),
                       ),
                       Visibility(
                           visible: _isFilter,
@@ -244,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList();
   }
 
-  _checkPromotion() =>
+  _checkDefault() =>
       !_isFilter && _selectedChips.isEmpty && _textEditingController.text.isEmpty && _typeSelected().isEmpty;
 
   List<ChipForm> _typeSelected() => _typeChips.where((element) => element.isSelected).toList();

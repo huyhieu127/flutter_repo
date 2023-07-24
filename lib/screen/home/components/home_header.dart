@@ -5,7 +5,7 @@ import 'package:flutter_repo/utils/decoration.dart';
 import 'package:flutter_repo/widgets/app_ink_well.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeHeader extends StatelessWidget {
+class HomeHeader extends StatefulWidget {
   const HomeHeader({
     super.key,
     required this.textEditingController,
@@ -22,6 +22,50 @@ class HomeHeader extends StatelessWidget {
   final bool isFilterType;
   final ValueChanged<bool>? onFocusChange;
   final GestureTapCallback? onFilterClick;
+
+  @override
+  State<HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<HomeHeader> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _prepareAnimations();
+    _runExpandCheck();
+  }
+
+  ///Setting up the animation
+  void _prepareAnimations() {
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _runExpandCheck() {
+    if (widget.isFilter) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  void didUpdateWidget(HomeHeader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _runExpandCheck();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +123,7 @@ class HomeHeader extends StatelessWidget {
               Expanded(
                 child: Container(
                   decoration: AppDecorations.decorationBgContainer(
-                    color: isFilterType ? AppColor.secondary.withAlpha(20) : Colors.white.withAlpha(20),
+                    color: widget.isFilterType ? AppColor.secondary.withAlpha(20) : Colors.white.withAlpha(20),
                   ),
                   child: Row(
                     children: [
@@ -87,10 +131,10 @@ class HomeHeader extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 16), child: SvgPicture.asset(Assets.images.icSearch)),
                       Expanded(
                         child: Focus(
-                          onFocusChange: onFocusChange,
+                          onFocusChange: widget.onFocusChange,
                           child: TextField(
-                            controller: textEditingController,
-                            focusNode: focusNode,
+                            controller: widget.textEditingController,
+                            focusNode: widget.focusNode,
                             style: const TextStyle(
                               color: Colors.white,
                             ),
@@ -114,24 +158,37 @@ class HomeHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              Visibility(
-                  visible: isFilter,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 12),
-                      AppInkWell(
-                        onTap: onFilterClick,
-                        child: Container(
-                          width: 58,
-                          height: 58,
-                          decoration: AppDecorations.decorationBgContainer(
-                            radius: 16,
-                            color: isFilterType ? AppColor.secondary.withAlpha(20) : Colors.white.withAlpha(20),
+              SizeTransition(
+                  axisAlignment: 1.0,
+                  axis: Axis.horizontal,
+                  sizeFactor: _animation,
+                  child: AnimatedScale(
+                    duration: const Duration(milliseconds: 450),
+                    scale: widget.isFilter ? 1.0 : 0.0,
+                    curve: Curves.fastOutSlowIn,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 350),
+                      offset: widget.isFilter ? const Offset(0, 0) : const Offset(0.5, 0),
+                      curve: Curves.fastOutSlowIn,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 12),
+                          GestureDetector(
+                            onTap: widget.onFilterClick,
+                            child: Container(
+                              width: 58,
+                              height: 58,
+                              decoration: AppDecorations.decorationBgContainer(
+                                radius: 16,
+                                color:
+                                    widget.isFilterType ? AppColor.secondary.withAlpha(20) : Colors.white.withAlpha(20),
+                              ),
+                              child: Center(child: SvgPicture.asset(Assets.images.icFilter)),
+                            ),
                           ),
-                          child: Center(child: SvgPicture.asset(Assets.images.icFilter)),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ))
             ],
           ),

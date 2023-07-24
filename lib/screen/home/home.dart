@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                       Visibility(
-                        visible: _selectedChips.isNotEmpty,
+                        visible: _selectedChips.isNotEmpty && !_isFilter,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
                           child: HomeChip(

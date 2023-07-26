@@ -22,7 +22,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   final FocusNode _focusNode = FocusNode();
   final _textEditingController = TextEditingController();
   bool _isFilter = false;
@@ -61,6 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<RestaurantForm> _restaurantResults = [];
   List<FoodForm> _foodResults = [];
 
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     _textEditingController.addListener(() {
@@ -70,12 +73,37 @@ class _HomeScreenState extends State<HomeScreen> {
     _restaurantResults = _restaurantList;
     _foodResults = _foodList;
     super.initState();
+    _prepareAnimations();
+  }
+
+  ///Setting up the animation
+  void _prepareAnimations() {
+    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 350));
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _runExpandChips() {
+    if (_selectedChips.isNotEmpty && !_isFilter) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
+
+  @override
+  void didUpdateWidget(HomeScreen oldWidget) {
+    _focusNode.dispose();
+    _textEditingController.dispose();
+    super.didUpdateWidget(oldWidget);
+    _runExpandChips();
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
-    _textEditingController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -117,11 +145,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         onFilterClick: () {
                           setState(() {
                             _isFilter = true;
+                            _runExpandChips();
                           });
                         },
                       ),
-                      Visibility(
-                        visible: _selectedChips.isNotEmpty && !_isFilter,
+
+                      //visible: _selectedChips.isNotEmpty && !_isFilter,
+                      SizeTransition(
+                        axisAlignment: 1.0,
+                        sizeFactor: _animation,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
                           child: HomeChip(
@@ -134,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   _isFilter = false;
                                 }
                                 _search();
+                                _runExpandChips();
                               });
                             },
                           ),
@@ -156,8 +189,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         visible: _checkFood(),
                         child: HomePopularMenu(foodList: _foodResults, isViewMore: _checkDefault()),
                       ),
-                      Visibility(
-                          visible: _isFilter,
+                      AnimatedSlide(
+                        offset: _isFilter ? const Offset(0, 0) : const Offset(0, 0.1),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.fastOutSlowIn,
+                        child: AnimatedOpacity(
+                          opacity: _isFilter ? 1 : 0,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.fastOutSlowIn,
                           child: HomeFilter(
                             typeChips: _typeChips,
                             locationChips: _locationChips,
@@ -167,7 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 _selectedChips = selectedChips;
                               });
                             },
-                          ))
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -187,6 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           _focusNode.unfocus();
                           _isFilter = false;
                           _search();
+                          _runExpandChips();
                         });
                       },
                     ),
@@ -215,21 +257,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _findRestaurant(String keyword) {
     ChipForm? locationSelected;
-    try{
+    try {
       locationSelected = _locationSelected().first;
-    }catch(e){
+    } catch (e) {
       locationSelected = null;
     }
 
     _restaurantResults = _restaurantList
         .where((item) =>
-            item.name.toLowerCase().contains(keyword.toLowerCase())
-                && (
-                locationSelected == null ||
-                    ((locationSelected.id == 1 && item.distance <= 1.0 ||
-                        locationSelected.id == 2 && item.distance > 10 ||
-                        locationSelected.id == 3 && item.distance < 10)))
-    )
+            item.name.toLowerCase().contains(keyword.toLowerCase()) &&
+            (locationSelected == null ||
+                ((locationSelected.id == 1 && item.distance <= 1.0 ||
+                    locationSelected.id == 2 && item.distance > 10 ||
+                    locationSelected.id == 3 && item.distance < 10))))
         .toList();
   }
 
